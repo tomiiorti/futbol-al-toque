@@ -1,0 +1,143 @@
+# config.yaml — Configuración del proyecto para el flujo SDD (modo solo-dev)
+# Este archivo lo leen los skills de Claude Code: spec, build, close, hotfix.
+schema: spec-driven
+
+# ─── Idioma de trabajo ────────────────────────────────────────────────────────
+project:
+  language: es
+  name: futbol-al-toque
+
+# ─── Stack técnico ────────────────────────────────────────────────────────────
+stack:
+  backend:
+    runtime: "Node.js 20 LTS"
+    framework: "NestJS"
+    language: "TypeScript"
+    api_style: "REST"
+    validation_library: "class-validator"   # DTOs backend (el frontend valida con Zod)
+    id_validation: "ParseUUIDPipe"
+
+  database:
+    type: "PostgreSQL"
+    orm: "Prisma"
+    migration_command: "npx prisma migrate dev"
+    query_conventions: "usar Prisma Client; nunca SQL crudo concatenando strings"
+    infra: "PostgreSQL 16 en contenedor Docker (docker-compose); Redis 7 previsto a futuro"
+
+  frontend:
+    framework: "Next.js"
+    language: "TypeScript"
+    styling: "Tailwind CSS"
+    libs: "React Hook Form + Zod (@hookform/resolvers), TanStack Query, Axios"
+
+# ─── Tracker de tareas ────────────────────────────────────────────────────────
+# Solo-dev / MVP: arranca en 'none' (sin llamadas a MCP). Cuando conectes Jira y
+# creemos las épicas/tickets, cambiá tool a "Jira" y las skills mueven estados solas.
+tracker:
+  tool: "none"
+  ticket_prefix: "FAT"                  # (se usa solo cuando tool = "Jira")
+  mcp_name: "Atlassian Rovo"
+  in_progress_status: "In Progress"
+  done_status: "Resolved"
+
+# ─── Control de versiones ────────────────────────────────────────────────────
+vcs:
+  tool: "git"
+  platform: "GitLab"
+  remote: "origin"
+  default_branch: "main"
+  branch_format: "feature/{TICKET-ID}"
+  hotfix_branch_format: "hotfix/{TICKET-ID}"
+  push_per_task: false                 # solo-dev: sin push por tarea; pusheás cuando quieras
+
+# ─── Convención de commits ───────────────────────────────────────────────────
+commit:
+  format: "feat|fix(módulo): task N - descripción [FAT-ID]"
+  hotfix_format: "hotfix(módulo): descripción [FAT-ID]"
+
+# ─── Contexto del proyecto ───────────────────────────────────────────────────
+context: |
+  ## Dominio
+  Futbol al Toque es una app para reservar canchas de fútbol. Un jugador busca canchas
+  disponibles por fecha y turno y solicita una reserva. Un administrador (dueño de un
+  complejo) gestiona sus complejos, canchas y horarios, y confirma o rechaza las reservas.
+
+  Reglas clave:
+    - Los complejos agrupan canchas; cada complejo tiene un dueño (User con rol ADMIN).
+    - Cada cancha tiene un horario semanal fijo de turnos (Schedule): día + hora + precio.
+    - La disponibilidad de una fecha = turnos de la plantilla − reservas activas de ese día.
+    - Un turno se considera ocupado si tiene una reserva en estado PENDING o CONFIRMED.
+    - Confirmación manual: la reserva nace PENDING; el admin la pasa a CONFIRMED o REJECTED.
+      El jugador puede pasarla a CANCELLED mientras siga pendiente o confirmada.
+    - Fuera de alcance del MVP: pagos y seña.
+
+  ## Stack técnico
+  - Backend: Node.js 20 + NestJS 10 + TypeScript (strict), API REST.
+    ORM Prisma sobre PostgreSQL 16. Validación de DTOs con class-validator + ValidationPipe
+    global (whitelist: true). Auth con JWT (Passport). IDs UUID v4 (ParseUUIDPipe).
+    Config y validación de env con @nestjs/config + Zod. Rate limiting con @nestjs/throttler.
+    Docs de API con @nestjs/swagger. Redis (ioredis) previsto para caché/sesiones/rate-limit
+    en una fase posterior.
+  - Frontend: Next.js 14 (App Router) + React + TypeScript + Tailwind CSS.
+    Formularios con React Hook Form + Zod (@hookform/resolvers). Datos del servidor con
+    TanStack Query. HTTP con Axios (instancia con interceptores de auth).
+  - Infra local: PostgreSQL (y Redis a futuro) en contenedores Docker vía docker-compose.
+  - Tests: Jest (unit) + supertest (e2e). Testcontainers para integración con Postgres (opcional).
+
+  ## Estructura del proyecto (monorepo)
+  - backend/                 → API NestJS
+    - prisma/schema.prisma   → modelo de datos + migraciones (Prisma Migrate)
+    - src/prisma             → PrismaService / PrismaModule
+    - src/auth               → registro, login, JWT guard
+    - src/users              → User (PLAYER | ADMIN)
+    - src/venues             → Venue (complejo)
+    - src/courts             → Court (cancha)
+    - src/schedules          → Schedule (turnos)
+    - src/bookings           → Booking (reserva)
+  - frontend/                → Next.js (App Router)
+    - app/                   → páginas
+    - lib/                   → cliente Axios, query client, schemas Zod
+  - docker-compose.yml       → postgres (+ redis a futuro)
+
+  ## Modelo de datos
+  - User: id (uuid), email (único), name, passwordHash, role (PLAYER | ADMIN), createdAt
+  - Venue: id (uuid), name, address, ownerId (fk User ADMIN), createdAt
+  - Court: id (uuid), venueId (fk), name, type (F5 | F7 | F11), surface, active (bool)
+  - Schedule: id (uuid), courtId (fk), dayOfWeek (0-6), startTime, endTime, price
+  - Booking: id (uuid), courtId (fk), userId (fk), date, startTime, endTime,
+             status (PENDING | CONFIRMED | REJECTED | CANCELLED), createdAt, updatedAt
+             — sin solapamiento entre reservas activas (PENDING/CONFIRMED) de (courtId, date, turno)
+
+  ## Convenciones de código
+  - Código y nombres de variables/clases en inglés; documentación y specs en español.
+  - Prisma Client para acceso a datos; nunca SQL crudo concatenando strings.
+  - DTOs de backend validados con class-validator; el frontend valida formularios con Zod.
+  - Un módulo NestJS por dominio; servicios sin lógica de HTTP.
+  - Tests con Jest (unit) y supertest (e2e/integración).
+
+# ─── Reglas por fase SDD ─────────────────────────────────────────────────────
+rules:
+  proposal:
+    - Escribir en español (el código sigue en inglés)
+    - Máximo 1 página
+    - El "Why" debe explicar el problema del usuario, no la solución técnica
+    - Listar exclusiones explícitas (qué NO entra en este change)
+
+  design:
+    - Escribir en español
+    - Incluir sección Decisions con alternativas consideradas y el motivo de la elección
+    - Mencionar si se requiere migración de PostgreSQL (Prisma Migrate) y los pasos
+    - No incluir pseudo-código detallado — eso va en el código
+
+  specs:
+    - Escribir en español
+    - Cada escenario verificable de forma independiente (GIVEN/WHEN/THEN)
+    - Usar SHALL para requisitos normativos
+    - Escenarios de seguridad obligatorios para toda mutación (auth, ownership)
+
+  tasks:
+    - Escribir en español
+    - Cada tarea completable en una sola sesión
+    - Ordenar por dependencia (schema/migración Prisma → servicio → controller/API → UI)
+    - Incluir el nombre exacto del archivo a crear o modificar
+    - Cubrir tests unitarios y de integración
