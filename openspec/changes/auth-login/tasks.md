@@ -34,3 +34,11 @@
   mockeado (la expiración la aplica `JwtModule.registerAsync` a nivel de
   módulo, no `AuthService`). Se movió esa verificación al test e2e (tarea 5.2),
   donde el `JwtModule` real sí firma con la expiración configurada.
+
+## Verificación (close) — 2026-09-21
+
+- /opsx:verify: Completeness ✅ · Correctness ✅ · Coherence ✅ · Critical 0
+- Tests: ✅ (3 unit + 5 e2e, todos verdes) · Regresión adyacentes: ✅ (única suite existente)
+- Typecheck (`tsc --noEmit`): ✅ · Lint (`eslint src/auth`): ✅
+- Drift: ninguno (JwtStrategy agregada según lo previsto en design.md, sin uso activo)
+- Veredicto: OK PARA ARCHIVAR
