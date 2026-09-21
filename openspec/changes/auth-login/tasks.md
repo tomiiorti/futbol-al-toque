@@ -23,9 +23,9 @@
 
 ## 5. Tests de integración (e2e)
 
-- [ ] 5.1 [S] Agregar `supertest` y `@types/supertest` a `backend/package.json` (devDependencies) y crear `backend/test/jest-e2e.json` apuntando a `**/*.e2e-spec.ts`.
-- [ ] 5.2 [M] Crear `backend/test/auth.e2e-spec.ts`: levanta la app de Nest (Testing.createTestingModule con `AppModule`) contra la base de test, hace seed de un usuario con password conocida, y verifica con supertest: `POST /auth/login` válido → 200 + token con `sub`/`role`; email inexistente → 401 mensaje genérico; password incorrecta → 401 mismo mensaje genérico; body inválido (`email` mal formado o `password` faltante) → 400.
-- [ ] 5.3 [S] Agregar script `"test:e2e": "jest --config ./test/jest-e2e.json"` a `backend/package.json`.
+- [x] 5.1 [S] Agregar `supertest` y `@types/supertest` a `backend/package.json` (devDependencies) y crear `backend/test/jest-e2e.json` apuntando a `**/*.e2e-spec.ts`.
+- [x] 5.2 [M] Crear `backend/test/auth.e2e-spec.ts`: levanta la app de Nest (Testing.createTestingModule con `AppModule`) contra la base de test, hace seed de un usuario con password conocida, y verifica con supertest: `POST /auth/login` válido → 200 + token con `sub`/`role`/`exp` consistente con `JWT_EXPIRES_IN`; email inexistente → 401 mensaje genérico; password incorrecta → 401 mismo mensaje genérico; body inválido (`email` mal formado o `password` faltante) → 400.
+- [x] 5.3 [S] Agregar script `"test:e2e": "jest --config ./test/jest-e2e.json"` a `backend/package.json`.
 
 ## Notas de implementación
 
