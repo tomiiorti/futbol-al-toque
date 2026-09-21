@@ -1,0 +1,29 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: fat_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: fat
+      POSTGRES_PASSWORD: fat_password
+      POSTGRES_DB: futbol_al_toque
+    ports:
+      - '5432:5432'
+    volumes:
+      - fat_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U fat -d futbol_al_toque']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis — descomentar cuando se necesite (caché, sesiones, rate limiting)
+  # redis:
+  #   image: redis:7
+  #   container_name: fat_redis
+  #   restart: unless-stopped
+  #   ports:
+  #     - '6379:6379'
+
+volumes:
+  fat_pgdata:
