@@ -47,7 +47,10 @@ describe('AuthService', () => {
   it('devuelve un JWT firmado con sub y role cuando las credenciales son válidas', async () => {
     prisma.user.findUnique.mockResolvedValue(user);
 
-    const token = await authService.login('admin@futbolaltoque.com', 'admin1234');
+    const token = await authService.login(
+      'admin@futbolaltoque.com',
+      'admin1234',
+    );
 
     expect(token).toBe('signed-jwt');
     expect(jwtService.signAsync).toHaveBeenCalledWith({
