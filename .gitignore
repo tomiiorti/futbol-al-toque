@@ -1,0 +1,31 @@
+# dependencias
+node_modules/
+**/node_modules/
+
+# variables de entorno (los .example SÍ se versionan)
+.env
+**/.env
+.env.local
+**/.env.local
+!**/.env.example
+!**/.env.local.example
+
+# builds
+dist/
+**/dist/
+.next/
+**/.next/
+out/
+
+# prisma: las migraciones se versionan; el client generado no
+**/generated/
+
+# logs / coverage / SO
+*.log
+coverage/
+**/coverage/
+.DS_Store
+
+# respaldo temporal del scaffold PRODE
+.claude/skills/_to_delete/
+openspec/_to_delete/

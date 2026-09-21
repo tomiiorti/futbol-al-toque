@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  PLAYER
+  ADMIN
+}
+
+enum CourtType {
+  F5
+  F7
+  F11
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  REJECTED
+  CANCELLED
+}
+
+model User {
+  id           String    @id @default(uuid()) @db.Uuid
+  email        String    @unique
+  name         String
+  passwordHash String
+  role         Role      @default(PLAYER)
+  createdAt    DateTime  @default(now())
+
+  venues   Venue[]
+  bookings Booking[]
+}
+
+model Venue {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  address   String
+  ownerId   String   @db.Uuid
+  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  courts Court[]
+
+  @@index([ownerId])
+}
+
+model Court {
+  id      String    @id @default(uuid()) @db.Uuid
+  venueId String    @db.Uuid
+  venue   Venue     @relation(fields: [venueId], references: [id], onDelete: Cascade)
+  name    String
+  type    CourtType
+  surface String?
+  active  Boolean   @default(true)
+
+  schedules Schedule[]
+  bookings  Booking[]
+
+  @@index([venueId])
+}
+
+model Schedule {
+  id        String  @id @default(uuid()) @db.Uuid
+  courtId   String  @db.Uuid
+  court     Court   @relation(fields: [courtId], references: [id], onDelete: Cascade)
+  dayOfWeek Int // 0=domingo ... 6=sábado
+  startTime String // "HH:mm"
+  endTime   String // "HH:mm"
+  price     Decimal @db.Decimal(10, 2)
+
+  @@index([courtId, dayOfWeek])
+}
+
+model Booking {
+  id        String        @id @default(uuid()) @db.Uuid
+  courtId   String        @db.Uuid
+  court     Court         @relation(fields: [courtId], references: [id], onDelete: Cascade)
+  userId    String        @db.Uuid
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      DateTime      @db.Date
+  startTime String // "HH:mm"
+  endTime   String // "HH:mm"
+  status    BookingStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  // La regla "sin doble reserva activa (PENDING/CONFIRMED) por cancha+fecha+turno"
+  // se valida en la lógica de negocio (H4.1), en una transacción.
+  @@index([courtId, date])
+  @@index([userId])
+}
