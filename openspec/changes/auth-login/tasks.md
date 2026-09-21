@@ -19,7 +19,7 @@
 
 ## 4. Tests unitarios
 
-- [ ] 4.1 [M] Crear `backend/src/auth/auth.service.spec.ts` con `PrismaService` mockeado: casos — login exitoso devuelve JWT con `sub`/`role` correctos y con `exp` consistente con `JWT_EXPIRES_IN` (config mockeada); email inexistente lanza `UnauthorizedException`; password incorrecta lanza `UnauthorizedException` con el mismo mensaje que el caso anterior.
+- [x] 4.1 [M] Crear `backend/src/auth/auth.service.spec.ts` con `PrismaService` mockeado: casos — login exitoso devuelve JWT con `sub`/`role` correctos y con `exp` consistente con `JWT_EXPIRES_IN` (config mockeada); email inexistente lanza `UnauthorizedException`; password incorrecta lanza `UnauthorizedException` con el mismo mensaje que el caso anterior. (Nota: verificación de `exp` movida al e2e, ver `## Notas de implementación`.)
 
 ## 5. Tests de integración (e2e)
 
@@ -29,4 +29,8 @@
 
 ## Notas de implementación
 
-(sin ambigüedades detectadas al momento de crear este change)
+- Tarea 4.1: la verificación de `exp` consistente con `JWT_EXPIRES_IN` no es
+  testeable a nivel unitario de `AuthService` porque ahí `JwtService` está
+  mockeado (la expiración la aplica `JwtModule.registerAsync` a nivel de
+  módulo, no `AuthService`). Se movió esa verificación al test e2e (tarea 5.2),
+  donde el `JwtModule` real sí firma con la expiración configurada.
