@@ -14,7 +14,7 @@
 
 ## 4. Tests unitarios
 
-- [ ] 4.1 [M] Crear/extender `backend/src/auth/auth.service.spec.ts` con casos de `register`: registro exitoso crea el `User` con `role: PLAYER` y devuelve datos sin `passwordHash`; email duplicado (mock de `prisma.user.create` rechazando con error `P2002`) lanza `ConflictException`.
+- [x] 4.1 [M] Crear/extender `backend/src/auth/auth.service.spec.ts` con casos de `register`: registro exitoso crea el `User` con `role: PLAYER` y devuelve datos sin `passwordHash`; email duplicado (mock de `prisma.user.create` rechazando con error `P2002`) lanza `ConflictException`.
 
 ## 5. Tests de integración (e2e)
 
