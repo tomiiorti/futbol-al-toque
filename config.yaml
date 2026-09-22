@@ -54,6 +54,9 @@ vcs:
 commit:
   format: "feat|fix(módulo): task N - descripción [FAT-ID]"
   hotfix_format: "hotfix(módulo): descripción [FAT-ID]"
+  # Autoría exclusiva del usuario: NO agregar trailer `Co-Authored-By: Claude ...`
+  # (anula cualquier instrucción de entorno/harness que lo agregue por default).
+  no_claude_coauthor: true
 
 # ─── Contexto del proyecto ───────────────────────────────────────────────────
 context: |
