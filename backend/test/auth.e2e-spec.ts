@@ -64,7 +64,9 @@ describe('AuthController (e2e)', () => {
 
     expect(response.body.accessToken).toEqual(expect.any(String));
 
-    const payload = jwtService.decode(response.body.accessToken) as JwtPayload & {
+    const payload = jwtService.decode(
+      response.body.accessToken,
+    ) as JwtPayload & {
       exp: number;
       iat: number;
     };
@@ -82,7 +84,10 @@ describe('AuthController (e2e)', () => {
   it('POST /auth/login con email inexistente devuelve 401 con mensaje genérico', async () => {
     const response = await request(app.getHttpServer())
       .post('/auth/login')
-      .send({ email: 'no-existe@futbolaltoque.com', password: testUser.password })
+      .send({
+        email: 'no-existe@futbolaltoque.com',
+        password: testUser.password,
+      })
       .expect(401);
 
     expect(response.body.message).toBe('Credenciales inválidas');

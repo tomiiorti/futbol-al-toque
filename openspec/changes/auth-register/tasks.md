@@ -18,7 +18,7 @@
 
 ## 5. Tests de integración (e2e)
 
-- [ ] 5.1 [M] Extender `backend/test/auth.e2e-spec.ts` (o crear `backend/test/auth-register.e2e-spec.ts`) cubriendo con supertest: registro válido → `201` con body sin `passwordHash` y `role: PLAYER`; email ya registrado → `409`; `name` faltante → `400`; `email` mal formado → `400`; `password` corta → `400`; intento de enviar `role: "ADMIN"` en el body → `400` (rechazado por `forbidNonWhitelisted`) y nunca se crea un usuario con ese rol. Limpiar los usuarios de test creados en `afterAll`.
+- [x] 5.1 [M] Extender `backend/test/auth.e2e-spec.ts` (o crear `backend/test/auth-register.e2e-spec.ts`) cubriendo con supertest: registro válido → `201` con body sin `passwordHash` y `role: PLAYER`; email ya registrado → `409`; `name` faltante → `400`; `email` mal formado → `400`; `password` corta → `400`; intento de enviar `role: "ADMIN"` en el body → `400` (rechazado por `forbidNonWhitelisted`) y nunca se crea un usuario con ese rol. Limpiar los usuarios de test creados en `afterAll`. (Se creó `backend/test/auth-register.e2e-spec.ts` como archivo separado de `auth.e2e-spec.ts`.)
 
 ## Notas de implementación
 
