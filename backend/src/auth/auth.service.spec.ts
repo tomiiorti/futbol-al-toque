@@ -1,14 +1,14 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
-import { Role } from '@prisma/client';
+import { Prisma, Role } from '@prisma/client';
 import * as argon2 from 'argon2';
 import { AuthService } from './auth.service';
 import { PrismaService } from '../prisma/prisma.service';
 
 describe('AuthService', () => {
   let authService: AuthService;
-  let prisma: { user: { findUnique: jest.Mock } };
+  let prisma: { user: { findUnique: jest.Mock; create: jest.Mock } };
   let jwtService: JwtService;
 
   const user = {
@@ -25,7 +25,7 @@ describe('AuthService', () => {
   });
 
   beforeEach(async () => {
-    prisma = { user: { findUnique: jest.fn() } };
+    prisma = { user: { findUnique: jest.fn(), create: jest.fn() } };
 
     const moduleRef = await Test.createTestingModule({
       providers: [
@@ -92,5 +92,58 @@ describe('AuthService', () => {
     expect((inexistentEmailError as UnauthorizedException).message).toBe(
       (wrongPasswordError as UnauthorizedException).message,
     );
+  });
+
+  describe('register', () => {
+    const registerDto = {
+      name: 'Juana Pérez',
+      email: 'juana@futbolaltoque.com',
+      password: 'password1234',
+    };
+
+    it('crea el usuario con role PLAYER y devuelve los datos sin passwordHash', async () => {
+      const createdUser = {
+        id: 'b1c2d3e4-1234-4a2b-8c3d-0000000000bb',
+        name: registerDto.name,
+        email: registerDto.email,
+        role: Role.PLAYER,
+        passwordHash: 'hash-irrelevante',
+        createdAt: new Date(),
+      };
+      prisma.user.create.mockResolvedValue(createdUser);
+
+      const result = await authService.register(registerDto);
+
+      expect(prisma.user.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            name: registerDto.name,
+            email: registerDto.email,
+            role: Role.PLAYER,
+          }),
+        }),
+      );
+      expect(result).toEqual({
+        id: createdUser.id,
+        name: createdUser.name,
+        email: createdUser.email,
+        role: createdUser.role,
+        createdAt: createdUser.createdAt,
+      });
+      expect(result).not.toHaveProperty('passwordHash');
+    });
+
+    it('lanza ConflictException cuando el email ya está registrado', async () => {
+      prisma.user.create.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError('Unique constraint failed', {
+          code: 'P2002',
+          clientVersion: '5.19.0',
+        }),
+      );
+
+      await expect(authService.register(registerDto)).rejects.toThrow(
+        ConflictException,
+      );
+    });
   });
 });
