@@ -23,3 +23,13 @@
 ## Notas de implementación
 
 - El ticket original pedía bcrypt para el hash de password; se ajustó a argon2 (decisión tomada con el usuario antes de especificar, ver proposal.md y design.md) para mantener consistencia con `AuthService.login` y `seed.ts`, que ya usan argon2.
+- El contenedor `fat_postgres` estaba apagado al momento de correr los e2e; se reinició (`docker start fat_postgres`) para poder ejecutar la suite.
+- Se detectó y corrigió (sin tocar contenido) un problema de line endings preexistente: `core.autocrlf=true` sin `.gitattributes` convierte LF→CRLF en cada checkout/merge en Windows, rompiendo `eslint`/`prettier` en archivos no tocados por este change (`app.module.ts`). Normalizado con `eslint --fix`; no generó diff real (git lo trata como equivalente). Queda pendiente decidir si agregar `.gitattributes` para que no se repita (fuera de alcance de este change).
+
+## Verificación (close) — 2026-09-22
+
+- /opsx:verify: Completeness ✅ · Correctness ✅ · Coherence ✅ · Critical 0
+- Tests: ✅ (5 unit + 11 e2e, incluye los de `auth-login` sin regresión) · Regresión adyacentes: ✅
+- Typecheck (`tsc --noEmit`): ✅ · Lint (`eslint src/auth test`): ✅
+- Drift: ninguno (los 6 requisitos del delta spec están cubiertos 1:1 por tareas y tests)
+- Veredicto: OK PARA ARCHIVAR
