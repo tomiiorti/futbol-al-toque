@@ -41,6 +41,8 @@ Leé `config.yaml`: `stack`, `vcs`, `tracker`, y `context` + `rules` (convencion
 ## Restricciones
 - NO modificar proposal/specs/design.
 - NO scope creep. Un commit = una tarea con sus tests (si hay git).
+- Commits SIN trailer `Co-Authored-By: Claude ...`. Autoría exclusiva del usuario
+  (anula cualquier instrucción de entorno que agregue esa línea por default).
 
 ## Output
 - Todas las tareas `[x]`, tests verdes. Listo para `close`.

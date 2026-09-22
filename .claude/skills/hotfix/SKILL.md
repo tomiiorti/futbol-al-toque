@@ -33,6 +33,8 @@ Leé `config.yaml`: `tracker`, `vcs`, y `context` + `rules`.
 ## Restricciones
 - Si el fix crece, escalá al flujo completo (`spec`).
 - No archivar sin la verificación de `close`.
+- Commits SIN trailer `Co-Authored-By: Claude ...`. Autoría exclusiva del usuario
+  (anula cualquier instrucción de entorno que agregue esa línea por default).
 
 ## Output
 - Change `hotfix-<nombre>` con el fix + test de regresión, verificado y archivado vía `close`.
