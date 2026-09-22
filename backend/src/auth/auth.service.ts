@@ -1,8 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Prisma, Role } from '@prisma/client';
 import * as argon2 from 'argon2';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { RegisterDto } from './dto/register.dto';
+import { RegisterResponseDto } from './dto/register-response.dto';
 
 // Hash argon2 fijo (sin password real asociada) usado solo para que la
 // verificación tarde lo mismo cuando el email no existe, y así no filtrar
@@ -34,5 +41,36 @@ export class AuthService {
 
     const payload: JwtPayload = { sub: user.id, role: user.role };
     return this.jwtService.signAsync(payload);
+  }
+
+  async register(dto: RegisterDto): Promise<RegisterResponseDto> {
+    const passwordHash = await argon2.hash(dto.password);
+
+    try {
+      const user = await this.prisma.user.create({
+        data: {
+          name: dto.name,
+          email: dto.email,
+          passwordHash,
+          role: Role.PLAYER,
+        },
+      });
+
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        createdAt: user.createdAt,
+      };
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new ConflictException('El email ya está registrado');
+      }
+      throw error;
+    }
   }
 }
