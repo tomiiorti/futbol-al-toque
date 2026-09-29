@@ -147,4 +147,35 @@ describe('AuthService', () => {
       );
     });
   });
+
+  describe('me', () => {
+    it('devuelve el usuario autenticado sin passwordHash', async () => {
+      prisma.user.findUnique.mockResolvedValue({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        createdAt: user.createdAt,
+      });
+
+      const result = await authService.me(user.id);
+
+      expect(result).toEqual({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        createdAt: user.createdAt,
+      });
+      expect(result).not.toHaveProperty('passwordHash');
+    });
+
+    it('lanza UnauthorizedException si el usuario ya no existe', async () => {
+      prisma.user.findUnique.mockResolvedValue(null);
+
+      await expect(authService.me(user.id)).rejects.toThrow(
+        UnauthorizedException,
+      );
+    });
+  });
 });
