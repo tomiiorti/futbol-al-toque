@@ -39,9 +39,9 @@
 
 ## 7. Verificación final
 
-- [ ] 7.1 [S] Correr `npm run lint` y `npm run test` (unit) en verde
-- [ ] 7.2 [S] Correr `npm run test:e2e` en verde (requiere Postgres levantado vía docker-compose)
-- [ ] 7.3 [S] Verificar a mano que sin `JWT_SECRET` (o con menos de 32 caracteres) la app no arranca
+- [x] 7.1 [S] Correr `npm run lint` y `npm run test` (unit) en verde
+- [x] 7.2 [S] Correr `npm run test:e2e` en verde (requiere Postgres levantado vía docker-compose)
+- [x] 7.3 [S] Verificar a mano que sin `JWT_SECRET` (o con menos de 32 caracteres) la app no arranca
 
 ## Notas de implementación
 
