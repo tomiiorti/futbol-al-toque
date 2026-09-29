@@ -32,10 +32,10 @@
 
 ## 6. Tests e2e
 
-- [ ] 6.1 [M] `backend/test/auth-roles.e2e-spec.ts`: controller de prueba `test-auth` con `GET public` (`@Public()`), `GET private` (sin decorador) y `GET admin` (`@Roles(Role.ADMIN)`)
-- [ ] 6.2 [L] `backend/test/auth-roles.e2e-spec.ts`: cubrir la matriz de decisión completa (sin token / token `PLAYER` / token `ADMIN` × sin decorador / `@Public()` / `@Roles(ADMIN)`) + token con `role` fuera del enum → 401 + token vencido (`expiresIn: '-1s'`) → 401
-- [ ] 6.3 [M] `backend/test/auth-roles.e2e-spec.ts`: `GET /auth/me` — 200 con usuario autenticado sin `passwordHash`; 401 si el usuario del token ya no existe en la DB
-- [ ] 6.4 [S] `backend/test/auth.e2e-spec.ts`: actualizar el assert del payload decodificado para incluir `email`
+- [x] 6.1 [M] `backend/test/auth-roles.e2e-spec.ts`: controller de prueba `test-auth` con `GET public` (`@Public()`), `GET private` (sin decorador) y `GET admin` (`@Roles(Role.ADMIN)`)
+- [x] 6.2 [L] `backend/test/auth-roles.e2e-spec.ts`: cubrir la matriz de decisión completa (sin token / token `PLAYER` / token `ADMIN` × sin decorador / `@Public()` / `@Roles(ADMIN)`) + token con `role` fuera del enum → 401 + token vencido (`expiresIn: '-1s'`) → 401
+- [x] 6.3 [M] `backend/test/auth-roles.e2e-spec.ts`: `GET /auth/me` — 200 con usuario autenticado sin `passwordHash`; 401 si el usuario del token ya no existe en la DB
+- [x] 6.4 [S] `backend/test/auth.e2e-spec.ts`: actualizar el assert del payload decodificado para incluir `email`
 
 ## 7. Verificación final
 
