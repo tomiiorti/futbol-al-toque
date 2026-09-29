@@ -44,7 +44,7 @@ describe('AuthService', () => {
     jwtService = moduleRef.get(JwtService);
   });
 
-  it('devuelve un JWT firmado con sub y role cuando las credenciales son válidas', async () => {
+  it('devuelve un JWT firmado con sub, email y role cuando las credenciales son válidas', async () => {
     prisma.user.findUnique.mockResolvedValue(user);
 
     const token = await authService.login(
@@ -55,6 +55,7 @@ describe('AuthService', () => {
     expect(token).toBe('signed-jwt');
     expect(jwtService.signAsync).toHaveBeenCalledWith({
       sub: user.id,
+      email: user.email,
       role: user.role,
     });
   });

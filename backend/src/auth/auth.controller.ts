@@ -1,6 +1,20 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AuthService } from './auth.service';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { Public } from './decorators/public.decorator';
 import { LoginDto } from './dto/login.dto';
 import { LoginResponseDto } from './dto/login-response.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -11,6 +25,7 @@ import { RegisterResponseDto } from './dto/register-response.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Iniciar sesión con email y password' })
@@ -21,6 +36,7 @@ export class AuthController {
     return { accessToken };
   }
 
+  @Public()
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Registrar un nuevo usuario (rol PLAYER)' })
@@ -29,5 +45,14 @@ export class AuthController {
   @ApiResponse({ status: 409, description: 'El email ya está registrado' })
   async register(@Body() dto: RegisterDto): Promise<RegisterResponseDto> {
     return this.authService.register(dto);
+  }
+
+  @ApiBearerAuth()
+  @Get('me')
+  @ApiOperation({ summary: 'Obtener el usuario autenticado' })
+  @ApiResponse({ status: 200, description: 'Usuario autenticado' })
+  @ApiResponse({ status: 401, description: 'No autenticado' })
+  async me(@CurrentUser('id') userId: string) {
+    return this.authService.me(userId);
   }
 }

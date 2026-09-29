@@ -6,7 +6,9 @@ export const envSchema = z.object({
     .default('development'),
   PORT: z.coerce.number().default(3000),
   DATABASE_URL: z.string().url(),
-  JWT_SECRET: z.string().min(16, 'JWT_SECRET debe tener al menos 16 caracteres'),
+  JWT_SECRET: z
+    .string()
+    .min(32, 'JWT_SECRET debe tener al menos 32 caracteres'),
   JWT_EXPIRES_IN: z.string().default('1d'),
 });
 
