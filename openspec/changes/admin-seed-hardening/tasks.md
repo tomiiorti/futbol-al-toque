@@ -31,3 +31,11 @@
 
 - Task 3.1: en vez de hacer `adminSeedEnvSchema.safeParse` + log manual dentro de `seed.ts`, se reusa `validateAdminSeedEnv` (misma función de la task 1.1, que ya lanza un `Error` formateado) y se deja que el único `.catch` de `main()` lo imprima y haga `process.exit(1)`. Mismo resultado (sin tocar la DB, mensaje claro, exit ≠ 0) pero sin duplicar la lógica de error — sigue el mismo patrón que `validateEnv` en `backend/src/config/env.validation.ts`.
 - Verificación manual de 6.3 (parcial, hecha durante el build): se confirmó que con `ADMIN_EMAIL` inválido el proceso termina con exit 1 y el mensaje de validación, sin crear/actualizar ningún `User` (se cortó antes de instanciar `PrismaClient`). No se pudo probar el caso "variables completamente ausentes" sin modificar el `.env` real del desarrollador (tiene `ADMIN_EMAIL`/`ADMIN_PASSWORD` seteadas, que Prisma autocarga); ese caso ya está cubierto por los unit tests de `admin-seed-env.schema.spec.ts`. Se verificó también que correr el seed dos veces seguidas con las mismas variables no duplica el `User` (upsert).
+
+## Verificación (close) — 2026-10-25
+
+- `/opsx:verify`: Completeness ✅ (11/11 tareas) · Correctness ✅ (los 4 requirements de `specs/admin-seed` tienen implementación y test que los cubre: `admin-seed-env.schema.ts`/`.spec.ts`, `upsert-admin-user.ts`/`.spec.ts`, `prisma/seed.ts`, `backend/.env.example`) · Coherence ✅ (sigue `design.md`: lógica extraída a `backend/src/admin-seed/` por el `rootDir: "src"` de Jest, sin tocar `env.validation.ts`, upsert por email preservado) · Critical 0
+- Tests: ✅ — `lint` limpio, 28/28 unit (incluye los 7 nuevos de `admin-seed`), 25/25 e2e (incluye el nuevo `admin-seed.e2e-spec.ts` de idempotencia)
+- Regresión en módulos adyacentes: ✅ — `auth`/`authorization` sin cambios y sus suites (`auth.e2e-spec.ts`, `auth-register.e2e-spec.ts`, `auth-roles.e2e-spec.ts`) siguen en verde
+- Drift: ninguno sin documentar. La única desviación del plan (task 3.1: reusar `validateAdminSeedEnv` en vez de `safeParse` inline) fue una decisión de implementación anotada arriba, consistente con el patrón ya usado por `validateEnv`
+- Veredicto: OK PARA ARCHIVAR
