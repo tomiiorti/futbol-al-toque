@@ -14,8 +14,8 @@
 
 ## 4. Documentación
 
-- [ ] 4.1 [S] `backend/.env.example`: quitar la connotación de "opcional" sobre las variables (dejar el comentario como "Seed del admin inicial — ADMIN_EMAIL y ADMIN_PASSWORD son obligatorias si se corre `npm run seed:admin`")
-- [ ] 4.2 [S] `README.md` línea 42: cambiar el comentario de `npm run seed:admin            # (opcional) crea el usuario admin inicial` a algo como `npm run seed:admin            # opcional correrlo; si lo corrés, ADMIN_EMAIL/ADMIN_PASSWORD (ver .env) son obligatorias`
+- [x] 4.1 [S] `backend/.env.example`: quitar la connotación de "opcional" sobre las variables (dejar el comentario como "Seed del admin inicial — ADMIN_EMAIL y ADMIN_PASSWORD son obligatorias si se corre `npm run seed:admin`")
+- [x] 4.2 [S] `README.md` línea 42: cambiar el comentario de `npm run seed:admin            # (opcional) crea el usuario admin inicial` a algo como `npm run seed:admin            # opcional correrlo; si lo corrés, ADMIN_EMAIL/ADMIN_PASSWORD (ver .env) son obligatorias`
 
 ## 5. Test de integración (idempotencia)
 
