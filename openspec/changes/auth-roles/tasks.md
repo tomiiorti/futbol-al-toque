@@ -46,3 +46,11 @@
 ## Notas de implementación
 
 - Al momento de escribir este change, `POST /auth/register` no existía en `main` (vivía en `feature/auth-register`, sin mergear), así que proposal.md/design.md lo dejan explícitamente fuera de alcance. Antes de arrancar el build, `feature/auth-register` se mergeó a `main` — el endpoint ya existe y `openspec/specs/auth/spec.md` ya tiene el requirement "Registro de usuario con datos válidos" (`201` para un visitante sin sesión). Sin corregir esto, el guard global de este change rompería ese requirement ya shippeado (register pasaría a devolver `401`). Se resuelve marcando `POST /auth/register` con `@Public()` (task 4.2) y agregando el requirement "Login y registro accesibles sin autenticación" al delta spec de `auth` en este change.
+
+## Verificación (close) — 2026-10-24
+
+- `/opsx:verify`: Completeness ✅ (24/24 tareas) · Correctness ✅ (los 8 requirements de `specs/auth` y `specs/authorization` están implementados y cubiertos por test) · Coherence ✅ (sigue las decisiones de `design.md`: orden de guards, `types/auth-user.ts`, rechazo explícito de rol inválido) · Critical 0
+- Tests: ✅ — `lint` limpio, 21/21 unit, 24/24 e2e (incluye la matriz de decisión completa, rol inválido, token vencido y `GET /auth/me`). Nota: en el primer intento de este close los 24 e2e fallaron porque Docker Desktop estaba apagado (sin Postgres); se reinició Docker, se confirmó el contenedor `fat_postgres` healthy y se volvió a correr la suite completa en verde — no fue una regresión de código.
+- Regresión en módulos adyacentes: ✅ — `users/venues/courts/schedules/bookings` siguen vacíos (sin código propio todavía), nada que regresar.
+- Drift: ninguno sin documentar. La única desviación del plan original (marcar `POST /auth/register` como `@Public()`, no contemplado al escribir el change) fue decidida explícitamente con el usuario y quedó reflejada en la nota de arriba y en el requirement "Login y registro accesibles sin autenticación" del delta spec de `auth`.
+- Veredicto: OK PARA ARCHIVAR
