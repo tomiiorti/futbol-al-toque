@@ -23,9 +23,9 @@
 
 ## 6. Verificación final
 
-- [ ] 6.1 [S] Correr `npm run lint` y `npm run test` (unit) en verde
-- [ ] 6.2 [S] Correr `npm run test:e2e` en verde (requiere Postgres levantado vía docker-compose)
-- [ ] 6.3 [S] Verificar a mano: `npm run seed:admin` sin variables → falla sin tocar la DB; con variables → crea el admin; ejecutado de nuevo → no duplica
+- [x] 6.1 [S] Correr `npm run lint` y `npm run test` (unit) en verde
+- [x] 6.2 [S] Correr `npm run test:e2e` en verde (requiere Postgres levantado vía docker-compose)
+- [x] 6.3 [S] Verificar a mano: `npm run seed:admin` sin variables → falla sin tocar la DB; con variables → crea el admin; ejecutado de nuevo → no duplica
 
 ## Notas de implementación
 
