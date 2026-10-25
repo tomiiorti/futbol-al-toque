@@ -19,7 +19,7 @@
 
 ## 5. Test de integración (idempotencia)
 
-- [ ] 5.1 [M] `backend/test/admin-seed.e2e-spec.ts`: contra la DB de test, llamar `upsertAdminUser` dos veces con el mismo `AdminSeedEnv` y verificar que `prisma.user.count({ where: { email } })` es `1` y `role: ADMIN`; limpiar el registro de prueba en `afterAll`
+- [x] 5.1 [M] `backend/test/admin-seed.e2e-spec.ts`: contra la DB de test, llamar `upsertAdminUser` dos veces con el mismo `AdminSeedEnv` y verificar que `prisma.user.count({ where: { email } })` es `1` y `role: ADMIN`; limpiar el registro de prueba en `afterAll`
 
 ## 6. Verificación final
 
