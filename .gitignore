@@ -29,3 +29,6 @@ coverage/
 # respaldo temporal del scaffold PRODE
 .claude/skills/_to_delete/
 openspec/_to_delete/
+
+# tickets generados por la skill jira-sdd-tickets: quedan locales, no se versionan
+docs/tickets/

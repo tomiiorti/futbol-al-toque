@@ -1,25 +1,20 @@
-import { PrismaClient, Role } from '@prisma/client';
-import * as argon2 from 'argon2';
-
-const prisma = new PrismaClient();
+import { PrismaClient } from '@prisma/client';
+import { validateAdminSeedEnv } from '../src/admin-seed/admin-seed-env.schema';
+import { upsertAdminUser } from '../src/admin-seed/upsert-admin-user';
 
 async function main() {
-  const email = process.env.ADMIN_EMAIL ?? 'admin@futbolaltoque.com';
-  const password = process.env.ADMIN_PASSWORD ?? 'admin1234';
-  const passwordHash = await argon2.hash(password);
+  const env = validateAdminSeedEnv(process.env);
 
-  await prisma.user.upsert({
-    where: { email },
-    update: {},
-    create: { email, name: 'Admin', passwordHash, role: Role.ADMIN },
-  });
-
-  console.log(`Admin listo: ${email}`);
+  const prisma = new PrismaClient();
+  try {
+    await upsertAdminUser(prisma, env);
+    console.log(`Admin listo: ${env.ADMIN_EMAIL}`);
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(() => prisma.$disconnect());
+main().catch((e) => {
+  console.error(e.message ?? e);
+  process.exit(1);
+});

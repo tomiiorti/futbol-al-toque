@@ -39,7 +39,7 @@ cd backend
 cp .env.example .env          # ajustá JWT_SECRET
 npm install
 npx prisma migrate dev --name init   # crea las tablas en la base
-npm run seed:admin            # (opcional) crea el usuario admin inicial
+npm run seed:admin            # opcional: crea el admin inicial (ADMIN_EMAIL/ADMIN_PASSWORD del .env son obligatorias si lo corrés)
 npm run dev                   # API en http://localhost:3000  (docs en /docs)
 ```
 
