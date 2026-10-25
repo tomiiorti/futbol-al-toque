@@ -6,7 +6,7 @@ import * as argon2 from 'argon2';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
-import { JwtPayload } from '../src/auth/interfaces/jwt-payload.interface';
+import { JwtPayload } from '../src/auth/types/auth-user';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
@@ -54,7 +54,7 @@ describe('AuthController (e2e)', () => {
     await app.close();
   });
 
-  it('POST /auth/login con credenciales válidas devuelve 200 y un JWT con sub/role/exp', async () => {
+  it('POST /auth/login con credenciales válidas devuelve 200 y un JWT con sub/email/role/exp', async () => {
     const beforeLogin = Math.floor(Date.now() / 1000);
 
     const response = await request(app.getHttpServer())
@@ -75,6 +75,7 @@ describe('AuthController (e2e)', () => {
     });
 
     expect(payload.sub).toBe(user.id);
+    expect(payload.email).toBe(user.email);
     expect(payload.role).toBe(user.role);
     // JWT_EXPIRES_IN="1d" en el .env de desarrollo/test
     expect(payload.exp).toBeGreaterThan(beforeLogin + 23 * 60 * 60);
