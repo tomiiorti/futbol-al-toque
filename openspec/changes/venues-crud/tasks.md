@@ -23,3 +23,11 @@
 
 - [x] 5.1 [S] Correr `npm run lint` y `npm run test` (unit) en verde
 - [x] 5.2 [S] Correr `npm run test:e2e` en verde (requiere Postgres levantado vía docker-compose)
+
+## Verificación (close) — 2026-10-25
+
+- `/opsx:verify`: Completeness ✅ (11/11 tareas) · Correctness ✅ (los 4 requirements de `specs/venues` tienen implementación y test e2e que los cubre: protección por rol, creación con ownerId propio, listado solo de los propios, y GET/PATCH/DELETE con 404/403 según corresponda) · Coherence ✅ (sigue `design.md`: `findOneOwned` busca por `id` antes de comparar `ownerId` para distinguir 404 de 403, `DELETE` se apoya en el cascade del schema sin lógica manual, la respuesta no anida `owner`) · Critical 0
+- Tests: ✅ — `lint` limpio, 36/36 unit (incluye los 8 nuevos de `VenuesService`), 36/36 e2e (incluye los 11 nuevos de `venues.e2e-spec.ts`: matriz de roles/ownership, validación y cascada confirmada contra una `Court` real)
+- Regresión en módulos adyacentes: ✅ — `auth`/`authorization`/`admin-seed` sin cambios y sus suites siguen en verde
+- Drift: ninguno — no se tocó `Court`, no hay paginación agregada, el contrato de respuesta es exactamente `{ id, name, address, ownerId, createdAt }` como define `design.md`
+- Veredicto: OK PARA ARCHIVAR
