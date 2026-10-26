@@ -1,6 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { CourtType } from '@prisma/client';
-import { IsBoolean, IsEnum, IsOptional, IsString, Length } from 'class-validator';
+import {
+  IsBoolean,
+  IsEnum,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
 
 export class CreateCourtDto {
   @ApiProperty({ example: 'Cancha 1' })

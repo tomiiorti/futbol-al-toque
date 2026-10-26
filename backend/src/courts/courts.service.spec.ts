@@ -81,7 +81,10 @@ describe('CourtsService', () => {
     venuesService.findOneOwned.mockRejectedValue(new ForbiddenException());
 
     await expect(
-      service.create(venueId, otherOwnerId, { name: court.name, type: court.type }),
+      service.create(venueId, otherOwnerId, {
+        name: court.name,
+        type: court.type,
+      }),
     ).rejects.toThrow(ForbiddenException);
     expect(prisma.court.create).not.toHaveBeenCalled();
   });
@@ -95,7 +98,10 @@ describe('CourtsService', () => {
   });
 
   it('findOneOwned lanza NotFoundException si la cancha pertenece a otro venue', async () => {
-    prisma.court.findUnique.mockResolvedValue({ ...court, venueId: otherVenueId });
+    prisma.court.findUnique.mockResolvedValue({
+      ...court,
+      venueId: otherVenueId,
+    });
 
     await expect(
       service.findOneOwned(court.id, venueId, ownerId),
@@ -134,7 +140,9 @@ describe('CourtsService', () => {
 
     await service.remove(court.id, venueId, ownerId);
 
-    expect(prisma.court.delete).toHaveBeenCalledWith({ where: { id: court.id } });
+    expect(prisma.court.delete).toHaveBeenCalledWith({
+      where: { id: court.id },
+    });
   });
 
   it('remove lanza NotFoundException si la cancha no existe, sin llamar a delete', async () => {
