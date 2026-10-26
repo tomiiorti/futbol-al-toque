@@ -21,5 +21,5 @@
 
 ## 5. Verificación final
 
-- [ ] 5.1 [S] Correr `npm run lint` y `npm run test` (unit) en verde
-- [ ] 5.2 [S] Correr `npm run test:e2e` en verde (requiere Postgres levantado vía docker-compose)
+- [x] 5.1 [S] Correr `npm run lint` y `npm run test` (unit) en verde
+- [x] 5.2 [S] Correr `npm run test:e2e` en verde (requiere Postgres levantado vía docker-compose)
