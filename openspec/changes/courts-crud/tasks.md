@@ -24,3 +24,11 @@
 
 - [x] 5.1 [S] Correr `npm run lint` y `npm run test` (unit) en verde
 - [x] 5.2 [S] Correr `npm run test:e2e` en verde (requiere Postgres levantado vía docker-compose)
+
+## Verificación (close) — 2026-10-26
+
+- `/opsx:verify`: Completeness ✅ (11/11 tareas en `[x]`) · Correctness ✅ (los 5 requirements de `specs/courts` tienen implementación y escenario e2e que los cubre: protección por rol, ownership del venue con 404/403, creación con validación de `name`/`type`, listado filtrado por `venueId`, y GET/PATCH/DELETE de ítem con 404 para cancha inexistente o de otro venue) · Coherence ✅ (sigue `design.md`: `CourtsService` reusa `VenuesService.findOneOwned` en vez de duplicar lógica de ownership, una `Court` ajena al venue responde `404` no `403`, `type` validado con `@IsEnum(CourtType)`, `DELETE` se apoya en el cascade del schema sin chequeos manuales, la respuesta no anida `venue`) · Critical 0
+- Tests: ✅ — `lint` limpio, 44/44 unit (incluye los 8 nuevos de `CourtsService`), 49/49 e2e (incluye los 13 nuevos de `courts.e2e-spec.ts`: matriz de roles/ownership por venue, validación de `type`/`name`, filtrado por `venueId`, 404 de cancha de otro venue, y cascada confirmada contra un `Schedule` real)
+- Regresión en módulos adyacentes: ✅ — `auth`/`authorization`/`admin-seed`/`venues` sin cambios de comportamiento y sus suites siguen en verde
+- Drift: ninguno — no se tocó `Schedule`/`Booking`, no hay paginación agregada, el contrato de respuesta es exactamente `{ id, venueId, name, type, surface, active }` como define `design.md`
+- Veredicto: OK PARA ARCHIVAR
