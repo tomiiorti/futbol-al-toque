@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { VenuesModule } from './venues/venues.module';
+import { CourtsModule } from './courts/courts.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { VenuesModule } from './venues/venues.module';
     HealthModule,
     AuthModule,
     VenuesModule,
+    CourtsModule,
   ],
   providers: [
     // Orden importa: primero autenticación, después rol.
