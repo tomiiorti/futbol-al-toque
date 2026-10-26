@@ -11,9 +11,9 @@
 
 ## 3. Controller y módulo
 
-- [ ] 3.1 [M] `backend/src/venues/venues.controller.ts`: `@Controller('venues')`, `@Roles(Role.ADMIN)` a nivel de clase; `POST /`, `GET /`, `GET /:id`, `PATCH /:id`, `DELETE /:id`, usando `@CurrentUser('id')` como `ownerId`; `DELETE` responde `204` (`@HttpCode(204)`)
-- [ ] 3.2 [S] `backend/src/venues/venues.module.ts`: `VenuesModule` con `VenuesController` y `VenuesService`
-- [ ] 3.3 [S] `backend/src/app.module.ts`: importar `VenuesModule`
+- [x] 3.1 [M] `backend/src/venues/venues.controller.ts`: `@Controller('venues')`, `@Roles(Role.ADMIN)` a nivel de clase; `POST /`, `GET /`, `GET /:id`, `PATCH /:id`, `DELETE /:id`, usando `@CurrentUser('id')` como `ownerId`; `DELETE` responde `204` (`@HttpCode(204)`)
+- [x] 3.2 [S] `backend/src/venues/venues.module.ts`: `VenuesModule` con `VenuesController` y `VenuesService`
+- [x] 3.3 [S] `backend/src/app.module.ts`: importar `VenuesModule`
 
 ## 4. Tests e2e
 

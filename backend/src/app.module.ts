@@ -8,6 +8,7 @@ import { HealthModule } from './health/health.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { RolesGuard } from './auth/guards/roles.guard';
+import { VenuesModule } from './venues/venues.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RolesGuard } from './auth/guards/roles.guard';
     PrismaModule,
     HealthModule,
     AuthModule,
+    VenuesModule,
   ],
   providers: [
     // Orden importa: primero autenticación, después rol.
