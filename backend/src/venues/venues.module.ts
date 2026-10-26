@@ -5,5 +5,6 @@ import { VenuesService } from './venues.service';
 @Module({
   controllers: [VenuesController],
   providers: [VenuesService],
+  exports: [VenuesService],
 })
 export class VenuesModule {}
