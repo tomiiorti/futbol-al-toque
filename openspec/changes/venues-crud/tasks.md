@@ -17,7 +17,7 @@
 
 ## 4. Tests e2e
 
-- [ ] 4.1 [L] `backend/test/venues.e2e-spec.ts`: matriz completa por endpoint — sin token (`401`), `PLAYER` (`403`), `ADMIN` dueño (`200`/`201`/`204` según corresponda), `ADMIN` no dueño (`403`), `id` inexistente (`404`), body inválido en `POST`/`PATCH` (`400`); confirmar que `GET /venues` de un `ADMIN` no incluye venues de otro `ADMIN`; confirmar que `DELETE` borra en cascada (crear una `Court` sobre el venue antes de borrarlo y verificar que también desaparece)
+- [x] 4.1 [L] `backend/test/venues.e2e-spec.ts`: matriz completa por endpoint — sin token (`401`), `PLAYER` (`403`), `ADMIN` dueño (`200`/`201`/`204` según corresponda), `ADMIN` no dueño (`403`), `id` inexistente (`404`), body inválido en `POST`/`PATCH` (`400`); confirmar que `GET /venues` de un `ADMIN` no incluye venues de otro `ADMIN`; confirmar que `DELETE` borra en cascada (crear una `Court` sobre el venue antes de borrarlo y verificar que también desaparece)
 
 ## 5. Verificación final
 
